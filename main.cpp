@@ -5,30 +5,26 @@ using namespace std;
 class CircularBuffer {
 private:
     vector<int> buffer;
-    int back;
+    int head;
     int maxFrames;
 
 public:
 
     CircularBuffer(size_t _maxFrames) {
         if (_maxFrames < 1) {
-            throw invalid_argument("maxFrames must be greater than 0!");
+            throw invalid_argument("maxFrames must be greater than 1!");
         }
         maxFrames = _maxFrames;
-        back = 0;
+        head = 0;
         buffer.resize(maxFrames);
     }
 
     void push_back(int frame) {
-        if (back < maxFrames) {
-            buffer.at(back) = frame;
-            back++;
+        buffer.at(head) = frame;
+        if (head == maxFrames - 1) {
+            head = 0;
         } else {
-            for (int i = 0; i < maxFrames - 1 ; i++) {
-                buffer.at(i) = buffer.at(i+1);
-            }
-
-            buffer.at(maxFrames - 1) = frame;
+            head++;
         }
     }
 
